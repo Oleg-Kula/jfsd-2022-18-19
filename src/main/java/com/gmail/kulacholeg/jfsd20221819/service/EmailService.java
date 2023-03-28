@@ -29,25 +29,23 @@ public class EmailService {
         return data;
     }
 
-    private void send(EmailData data){
+    private EmailData send(EmailData data){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("se492367@gmail.com");
         message.setTo(data.getEmail());
         message.setSubject(data.getSubject());
         message.setText(data.getContent());
-        emailSender.send(message);
+        try{
+            emailSender.send(message);
+            data.setIsSend(true);
+        }catch (Exception e){
+            data.setErrorMessage(e.getMessage());
+        }
+        return data;
     }
     public void processDataReceived(DataReceivedMessage message) {
         EmailData email = messageToData(message);
-
-        try {
-            this.send(email);
-            email.setIsSend(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            repository.save(email);
-        }
+        repository.save(this.send(email));
     }
 
     @Scheduled(fixedRate = 300000)

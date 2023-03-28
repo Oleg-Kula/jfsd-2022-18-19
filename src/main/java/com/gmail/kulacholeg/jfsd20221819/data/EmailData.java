@@ -24,4 +24,6 @@ public class EmailData {
     private String recipientId;
 
     private Boolean isSend;
+
+    private String errorMessage;
 }
