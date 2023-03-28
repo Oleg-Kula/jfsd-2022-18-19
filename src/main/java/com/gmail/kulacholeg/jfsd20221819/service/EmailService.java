@@ -38,6 +38,7 @@ public class EmailService {
         try{
             emailSender.send(message);
             data.setIsSend(true);
+            data.setErrorMessage("");
         }catch (Exception e){
             data.setErrorMessage(e.getMessage());
         }
@@ -54,7 +55,7 @@ public class EmailService {
 
         if (!emails.isEmpty()){
             for(EmailData email : emails){
-                this.send(email);
+                repository.save(this.send(email));
             }
         }
     }
